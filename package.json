@@ -1,0 +1,21 @@
+{
+  "name": "data-integration-metrics-platform",
+  "version": "1.0.0",
+  "description": "Data Integration & Metrics Platform - sync pipeline and drift-free revenue metrics",
+  "type": "module",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "node --watch src/index.js",
+    "test": "node --test src/metrics/revenue-consistency.test.js",
+    "seed": "node src/db/seed-transactions.js"
+  },
+  "engines": { "node": ">=20.0.0" },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.49.1",
+    "express": "^4.21.2"
+  },
+  "keywords": ["data-integration", "metrics", "strategy-pattern", "supabase"],
+  "author": "",
+  "license": "MIT"
+}
