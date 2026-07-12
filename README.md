@@ -37,6 +37,48 @@ Run `npm test` — catches drift and duplicate strategy registration.
 
 Without Supabase credentials, transactions use in-memory seeded mock data (Stripe / QuickBooks / Square test-mode shapes).
 
+## Deploy on Render (free tier)
+
+Repo: `https://github.com/shrivatskrishan/data-integration-metrics-platform`
+
+1. Sign up / log in at [render.com](https://render.com)
+2. **New +** → **Web Service**
+3. Connect GitHub and select `data-integration-metrics-platform`
+4. Use these settings:
+
+| Setting | Value |
+|---------|-------|
+| **Branch** | `main` |
+| **Runtime** | Node |
+| **Build Command** | `npm install` |
+| **Start Command** | `npm start` |
+| **Plan** | Free |
+
+5. Add environment variables (optional — app works without Supabase):
+
+| Key | Value |
+|-----|-------|
+| `NODE_ENV` | `production` |
+| `SUPABASE_URL` | *(optional)* |
+| `SUPABASE_SERVICE_ROLE_KEY` | *(optional)* |
+
+6. Click **Create Web Service** — Render assigns a URL like:
+   `https://data-integration-metrics-platform.onrender.com`
+
+### Live endpoints to test
+
+| What | URL |
+|------|-----|
+| Browser test UI | `https://YOUR-APP.onrender.com/` |
+| Health check | `https://YOUR-APP.onrender.com/api/health` |
+| Sync all sources (POST) | `https://YOUR-APP.onrender.com/api/sync` |
+| Normalized records | `https://YOUR-APP.onrender.com/api/records` |
+| Revenue summary | `https://YOUR-APP.onrender.com/api/metrics/revenue/summary?from=2026-07-01T00:00:00.000Z&to=2026-07-31T23:59:59.999Z` |
+
+> **Note:** Free tier sleeps after ~15 min idle. First request after sleep may take 30–60 seconds (cold start).
+
+Alternatively, use the included `render.yaml` blueprint: **New +** → **Blueprint** → select this repo.
+
 ## Quick start
 
 ```bash
