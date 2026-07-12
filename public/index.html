@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>API Browser Test</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      font-family: system-ui, sans-serif; max-width: 960px; margin: 2rem auto;
+      padding: 0 1rem; color: #1a1a1a; background: #f8fafc;
+    }
+    h1 { font-size: 1.5rem; margin-bottom: 0.25rem; }
+    .subtitle { color: #555; margin-top: 0; margin-bottom: 2rem; }
+
+    .feature {
+      border-radius: 12px; padding: 1.25rem 1.5rem; margin-bottom: 1.5rem;
+      border: 2px solid; background: #fff;
+    }
+    .feature-sync { border-color: #3b82f6; }
+    .feature-metrics { border-color: #10b981; }
+
+    .feature-header { display: flex; align-items: flex-start; gap: 0.75rem; margin-bottom: 1rem; }
+    .badge {
+      flex-shrink: 0; font-size: 0.7rem; font-weight: 700; letter-spacing: 0.04em;
+      text-transform: uppercase; padding: 0.25rem 0.5rem; border-radius: 4px; color: #fff;
+    }
+    .badge-sync { background: #3b82f6; }
+    .badge-metrics { background: #10b981; }
+
+    .feature h2 { font-size: 1.05rem; margin: 0 0 0.35rem; }
+    .feature-desc { font-size: 0.88rem; color: #555; margin: 0; line-height: 1.5; }
+
+    .sub-label {
+      font-size: 0.75rem; font-weight: 600; text-transform: uppercase;
+      letter-spacing: 0.05em; color: #888; margin: 1rem 0 0.4rem;
+    }
+    .row { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 0.25rem; }
+
+    button, a.btn {
+      padding: 0.45rem 0.75rem; border: 1px solid #ccc; border-radius: 6px;
+      background: #f5f5f5; cursor: pointer; text-decoration: none; color: inherit; font-size: 0.88rem;
+    }
+    button:hover, a.btn:hover { background: #e8e8e8; }
+    .feature-sync button.primary { background: #3b82f6; color: #fff; border-color: #3b82f6; }
+    .feature-sync button.primary:hover { background: #2563eb; }
+    .feature-metrics button.primary { background: #10b981; color: #fff; border-color: #10b981; }
+    .feature-metrics button.primary:hover { background: #059669; }
+
+    .hint { font-size: 0.82rem; color: #666; margin: 0.5rem 0 0; }
+    .hint code { background: #f1f5f9; padding: 0.1rem 0.35rem; border-radius: 3px; font-size: 0.8rem; }
+
+    .response-panel {
+      background: #fff; border: 1px solid #e2e8f0; border-radius: 12px;
+      padding: 1.25rem 1.5rem; margin-top: 0.5rem;
+    }
+    .response-panel h2 { font-size: 1rem; margin: 0 0 0.75rem; }
+    pre {
+      background: #0f172a; color: #e2e8f0; padding: 1rem; border-radius: 8px;
+      overflow: auto; font-size: 0.8rem; min-height: 120px; white-space: pre-wrap; margin: 0;
+    }
+
+    .utility { margin-bottom: 1.5rem; }
+    .utility a.btn { font-size: 0.82rem; }
+  </style>
+</head>
+<body>
+  <h1>Data Integration & Metrics Platform</h1>
+  <p class="subtitle">Two independent features — test each section below. GET links open JSON in a new tab. POST buttons show results at the bottom.</p>
+
+  <div class="utility">
+    <a class="btn" href="/api/health" target="_blank">Health check</a>
+  </div>
+
+  <!-- SECTION 1: SYNC PIPELINE -->
+  <div class="feature feature-sync">
+    <div class="feature-header">
+      <span class="badge badge-sync">Feature 1</span>
+      <div>
+        <h2>Sync Pipeline — doesn't lie or duplicate data</h2>
+        <p class="feature-desc">
+          Ingests CRM, payments, and calendar data into one normalized schema.
+          Idempotent writes (re-run = no duplicates), auto full-backfill on stale cursors,
+          and fault isolation (one source down, others still sync).
+        </p>
+      </div>
+    </div>
+
+    <p class="sub-label">POST — trigger sync</p>
+    <div class="row">
+      <button class="primary" data-post="/api/sync" data-section="sync">Sync all sources</button>
+      <button data-post="/api/sync/crm" data-section="sync">Sync CRM</button>
+      <button data-post="/api/sync/payments" data-section="sync">Sync payments</button>
+      <button data-post="/api/sync/calendar" data-section="sync">Sync calendar</button>
+    </div>
+
+    <p class="sub-label">GET — view results</p>
+    <div class="row">
+      <a class="btn" href="/api/sync/status" target="_blank">Sync status</a>
+      <a class="btn" href="/api/records" target="_blank">All records (normalized)</a>
+    </div>
+    <p class="hint">
+      Run <strong>Sync all sources</strong> first, then open <strong>All records</strong>.
+      Run sync twice — count stays at 15 (no duplicates).
+    </p>
+  </div>
+
+  <!-- SECTION 2: REVENUE METRICS -->
+  <div class="feature feature-metrics">
+    <div class="feature-header">
+      <span class="badge badge-metrics">Feature 2</span>
+      <div>
+        <h2>Revenue Metrics — one number that never drifts</h2>
+        <p class="feature-desc">
+          Computes total collected revenue across Stripe, QuickBooks, and Square using a single
+          allow-list (<code>paid</code>, <code>succeeded</code>, <code>completed</code>, <code>settled</code>).
+          Summary and breakdown always agree — Strategy Pattern prevents drift.
+        </p>
+      </div>
+    </div>
+
+    <p class="sub-label">GET — revenue views (July 2026)</p>
+    <div class="row">
+      <a class="btn" href="/api/metrics/revenue/summary?from=2026-07-01T00:00:00.000Z&to=2026-07-31T23:59:59.999Z" target="_blank">Summary total</a>
+      <a class="btn" href="/api/metrics/revenue/breakdown?from=2026-07-01T00:00:00.000Z&to=2026-07-31T23:59:59.999Z&granularity=day" target="_blank">Day-by-day breakdown</a>
+      <a class="btn" href="/api/metrics/revenue?from=2026-07-01T00:00:00.000Z&to=2026-07-31T23:59:59.999Z&granularity=week" target="_blank">Both views + consistency check</a>
+    </div>
+    <p class="hint">
+      Expected total for July 2026: <strong>$60,699</strong> (8 of 15 transactions — pending/refunded/failed excluded).
+      Summary and breakdown totals will always match.
+    </p>
+  </div>
+
+  <div class="response-panel">
+    <h2>POST Response</h2>
+    <pre id="output">Click a POST button above to see JSON here…</pre>
+  </div>
+
+  <script>
+    const output = document.getElementById('output');
+
+    async function callApi(method, path, section) {
+      const label = section === 'sync' ? 'Sync Pipeline' : 'Revenue Metrics';
+      output.textContent = `[${label}] Loading ${method} ${path}…`;
+      try {
+        const res = await fetch(path, {
+          method,
+          headers: method === 'POST' ? { 'Content-Type': 'application/json' } : {},
+          body: method === 'POST' ? '{}' : undefined,
+        });
+        const data = await res.json();
+        output.textContent = `[${label}]\n` + JSON.stringify({ status: res.status, ...data }, null, 2);
+      } catch (err) {
+        output.textContent = `Error: ${err.message}`;
+      }
+    }
+
+    document.querySelectorAll('[data-post]').forEach((btn) => {
+      btn.addEventListener('click', () => callApi('POST', btn.dataset.post, btn.dataset.section));
+    });
+  </script>
+</body>
+</html>
