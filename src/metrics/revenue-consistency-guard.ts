@@ -1,7 +1,13 @@
 import { roundMoney } from '../utils/date.js';
 
 export class RevenueDriftError extends Error {
-  constructor(summaryTotal, breakdownTotal, diff) {
+  code: string;
+  statusCode: number;
+  summaryTotal: number;
+  breakdownTotal: number;
+  diff: number;
+
+  constructor(summaryTotal: number, breakdownTotal: number, diff: number) {
     super(`Revenue views drifted: summary=${summaryTotal}, breakdown sum=${breakdownTotal}, diff=${diff}`);
     this.name = 'RevenueDriftError';
     this.code = 'REVENUE_DRIFT';
@@ -16,7 +22,7 @@ export class RevenueDriftError extends Error {
  * Ensures summary and breakdown always agree.
  * Called on every metrics response — catches duplicate calculation paths immediately.
  */
-export function assertViewsAgree(summaryTotal, breakdownRows) {
+export function assertViewsAgree(summaryTotal: number, breakdownRows: Array<{ total: number }>) {
   const breakdownTotal = roundMoney(breakdownRows.reduce((sum, row) => sum + row.total, 0));
   const summary = roundMoney(summaryTotal);
   const diff = roundMoney(Math.abs(summary - breakdownTotal));

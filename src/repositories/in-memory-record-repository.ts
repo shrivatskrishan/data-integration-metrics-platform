@@ -1,7 +1,7 @@
 export class InMemoryRecordRepository {
-  #records = new Map();
+  #records = new Map<string, any>();
 
-  async upsert(record) {
+  async upsert(record: any) {
     const existing = this.#records.get(record.id);
     if (!existing) {
       this.#records.set(record.id, { ...record, syncedAt: new Date().toISOString() });
@@ -13,14 +13,14 @@ export class InMemoryRecordRepository {
     return { action: 'updated', record: updated };
   }
 
-  async findAll({ source } = {}) {
+  async findAll({ source }: { source?: string } = {}) {
     const all = [...this.#records.values()];
     return source ? all.filter((r) => r.source === source) : all;
   }
 
-  async findById(id) { return this.#records.get(id) ?? null; }
+  async findById(id: string) { return this.#records.get(id) ?? null; }
 
-  async count({ source } = {}) {
+  async count({ source }: { source?: string } = {}) {
     if (!source) return this.#records.size;
     return [...this.#records.values()].filter((r) => r.source === source).length;
   }

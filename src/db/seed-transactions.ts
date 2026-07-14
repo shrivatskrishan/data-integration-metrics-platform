@@ -7,7 +7,7 @@ const logger = new Logger(config.logLevel);
 
 async function main() {
   if (!config.supabase.enabled) {
-    logger.error('Set SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY in .env to seed Supabase');
+    logger.error('Set SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY in .env to seed Supabase', {});
     process.exitCode = 1;
     return;
   }

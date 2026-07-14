@@ -16,7 +16,7 @@ export class SourceSyncService {
       return await this.#runFetch('incremental', () => this.#adapter.fetchIncremental(cursor));
     } catch (error) {
       if (error instanceof StaleCursorError || error instanceof ExpiredTokenError) {
-        this.#logger.warn('Falling back to full backfill', { source: this.sourceName, code: error.code });
+        this.#logger.warn('Falling back to full backfill', { source: this.sourceName, code: error instanceof Error ? (error as any).code : undefined });
         const result = await this.#runFetch('full', () => this.#adapter.fetchFull());
         return { ...result, fallbackToFull: true };
       }
@@ -48,7 +48,7 @@ export class SourceSyncService {
       return createSourceSyncResult(source, { mode, fetched: records.length, written, skipped, failed, cursor: nextCursor });
     } catch (error) {
       if (error instanceof StaleCursorError || error instanceof ExpiredTokenError) throw error;
-      this.#logger.error('Source sync failed', { source, error: error.message, code: error.code });
+      this.#logger.error('Source sync failed', { source, error: error instanceof Error ? error.message : String(error), code: error instanceof Error ? (error as any).code : undefined });
       return createSourceSyncResult(source, { mode, error });
     }
   }

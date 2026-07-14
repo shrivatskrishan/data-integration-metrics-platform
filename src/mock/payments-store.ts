@@ -14,7 +14,7 @@ export class PaymentsMockStore {
   #staleThreshold;
   #unavailable = false;
 
-  constructor(options = {}) {
+  constructor(options: { staleCursorThreshold?: number } = {}) {
     this.#records = structuredClone(PAYMENTS_SEED);
     this.#staleThreshold = options.staleCursorThreshold ?? STALE_CURSOR_THRESHOLD;
   }
@@ -28,7 +28,7 @@ export class PaymentsMockStore {
 
   getSince(cursor) {
     guardUnavailable('payments', this.#unavailable, 'Payments API 503');
-    validateIncrementalFetch({ source: 'payments', cursor, staleThreshold: this.#staleThreshold });
+    validateIncrementalFetch({ source: 'payments', cursor, staleThreshold: this.#staleThreshold, expiredToken: undefined });
     return filterRecordsSince(this.#records, cursor, (r) => r.updated_at);
   }
 

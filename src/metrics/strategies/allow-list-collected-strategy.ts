@@ -21,11 +21,11 @@ export class AllowListCollectedStrategy extends RevenueCalculationStrategy {
     return this.#allowList.has(normalized);
   }
 
-  groupCollectedByPeriod(transactions, { granularity, fromDate, toDate }) {
+  groupCollectedByPeriod(transactions: any[], { granularity, from, to }: { granularity: string; from: string; to: string }) {
     const buckets = new Map();
 
     for (const tx of this.filterCollected(transactions)) {
-      if (!isWithinRange(tx.occurred_at, fromDate, toDate)) continue;
+      if (!isWithinRange(tx.occurred_at, from, to)) continue;
       const key = bucketKey(tx.occurred_at, granularity);
       if (!key) continue;
       const bucket = buckets.get(key) ?? { period: key, total: 0, count: 0, sources: {} };

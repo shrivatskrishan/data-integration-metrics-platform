@@ -17,7 +17,7 @@ export class CrmMockStore {
   #unavailable = false;
   #expiredToken = { active: false };
 
-  constructor(options = {}) {
+  constructor(options: { staleCursorThreshold?: number } = {}) {
     this.#records = structuredClone(CRM_SEED);
     this.#staleThreshold = options.staleCursorThreshold ?? STALE_CURSOR_THRESHOLD;
   }

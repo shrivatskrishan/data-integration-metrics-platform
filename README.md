@@ -87,6 +87,11 @@ npm test
 npm start
 ```
 
+## Project history
+
+The full chat history for this project is stored in [CHAT_HISTORY.txt](CHAT_HISTORY.txt).
+The Claude chat history is also available in [CLAUDE_CHAT_HISTORY.txt](CLAUDE_CHAT_HISTORY.txt).
+
 ## License
 
 MIT
